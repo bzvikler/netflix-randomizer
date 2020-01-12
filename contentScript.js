@@ -3,11 +3,6 @@ var link = document.createElement('link');
 link.rel="stylesheet";
 link.href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css";
 document.head.appendChild(link);
-var css = document.createElement('link');
-css.rel="stylesheet";
-css.href="./styles.css";
-document.head.appendChild(css);
-
 
 // initial injection
 insertButtonIntoSeries();
@@ -64,7 +59,7 @@ function insertButton(content, id) {
         shuffleButton.appendChild(buttonText);
 
         // todo: add actual shuffling action
-        shuffleButton.addEventListener("click", () => renderAnimation(id));
+        shuffleButton.addEventListener("click", () => playRandomEpisode(id));
         
         // dont inject if already tehre
         var shuffleButtons = [];
@@ -85,26 +80,30 @@ function insertButton(content, id) {
     }
 }
 
-var icon = `
-<div class="container">
-    <div class="loading-label">
-        CHOOSING EPISODE
-    </div>
-    <div class="wavecontainer">
-      <div class="wave"></div>
-      <div class="wave"></div>
-      <div class="wave"></div>
-      <div class="wave"></div>
-      <div class="wave"></div>
-    </div>
-  </div>`
-
 function renderAnimation(id) {
-    console.log("clicked!");
+    var icon = `
+    <div class="container">
+        <div class="loading-label">
+            CHOOSING EPISODE
+        </div>
+        <div class="wavecontainer">
+        <div class="wave"></div>
+        <div class="wave"></div>
+        <div class="wave"></div>
+        <div class="wave"></div>
+        <div class="wave"></div>
+        </div>
+    </div>`
     let container = document.getElementById(id);
     var overlay = document.createElement('div');
     overlay.id = "overlay";
     overlay.innerHTML = icon;
     overlay.setAttribute("class", "shuffle-overlay");
     container.appendChild(overlay);
+}
+
+function playRandomEpisode(id) {
+    renderAnimation(id);
+    // TODO: uncomment below
+    // shuffleEpisodes();
 }
