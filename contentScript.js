@@ -119,25 +119,29 @@ insertButtonIntoSeries();
 
 // additional injections upon url and tab changes
 let url = window.location.href;
-["click", "popstate", "onload"].forEach(evt =>
-  window.addEventListener(
-    evt,
+["click", "popstate", "onload"].forEach(evt => {
+    window.addEventListener(evt,
     function() {
       requestAnimationFrame(() => {
         if (url !== location.href) {
+          url = location.href;
           insertButtonIntoSeries();
         }
-        url = location.href;
       });
     },
-    true
-  )
+    true)
+  }
 );
-document
-  .querySelector("div.jawBone > ul")
-  .addEventListener("click", function() {
-    requestAnimationFrame(() => insertButtonIntoSeries());
-  });
+
+function addMenuListener(content) {
+  var menu = content.querySelector("div.jawBone > ul");
+  if (menu != undefined) {
+    menu.addEventListener("click", function() {
+      requestAnimationFrame(() => insertButtonIntoSeries());
+    });
+  }
+}
+
 
 // get jawbones that are series, not movies (aka. has episodes to shuffle)
 function insertButtonIntoSeries() {
@@ -149,6 +153,7 @@ function insertButtonIntoSeries() {
         n.childNodes.forEach(menuItem => {
           if (menuItem.className === "Episodes") {
             insertButton(jb, id);
+            addMenuListener(jb);
           }
         });
       }
@@ -164,13 +169,13 @@ function insertButton(content, id) {
     shuffleButton.setAttribute("id", "randomize-button");
     shuffleButton.setAttribute(
       "class",
-      "nf-icon-button nf-flat-button nf-flat-button-primary nf-flat-button-uppercase"
+      "nf-icon-button nf-flat-button nf-flat-button-primary nf-flat-button-uppercase randomize-button"
     );
 
     var buttonContent = document.createElement("span");
     buttonContent.setAttribute("class", "nf-flat-button-icon");
     buttonContent.innerHTML =
-      '<i class="fa fa-random" style="font-size: 11px"></i>';
+      '<i class="fa fa-random"></i>';
 
     var buttonText = document.createElement("span");
     buttonText.setAttribute("class", "nf-flat-button-text");
@@ -224,6 +229,5 @@ function renderAnimation(id) {
 
 function playRandomEpisode(id) {
   renderAnimation(id);
-  // TODO: uncomment below
   shuffleEpisodes(id);
 }

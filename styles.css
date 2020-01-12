@@ -11,6 +11,10 @@
     align-items: center;
 }
 
+.randomize-button {
+  cursor: pointer;
+}
+
 .container {
     display: flex;
     flex-direction: column;
