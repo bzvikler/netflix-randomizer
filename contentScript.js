@@ -25,18 +25,19 @@ const wait = async () => {
 const getRandIntInRange = max => Math.floor(Math.random() * Math.floor(max));
 
 const getTitleElement = titleId => {
-  console.log(`${titleId}`);
   return document.getElementById(`${titleId}`);
 };
 const getEpisodeTab = titleElement => titleElement.querySelector(EPISODES_TAB);
 const getSeasonDropdown = titleElement =>
   titleElement.querySelector(SEASONS_DROPDOWN);
 const getSeasons = titleElement => titleElement.querySelectorAll(SEASONS);
-let getNextEpisodeChevron = () => document.querySelector(NEXT_EPISODE_CHEVRON);
-const getPrevEpisodeChevron = () =>
-  document.querySelector(PREV_EPISODE_CHEVRON);
-const getLastEpisode = () => document.querySelector(LAST_EPISODE);
-const getOnScreenEpisodes = () => document.querySelectorAll(ON_SCREEN_EPISODES);
+let getNextEpisodeChevron = titleElement =>
+  titleElement.querySelector(NEXT_EPISODE_CHEVRON);
+let getPrevEpisodeChevron = titleElement =>
+  titleElement.querySelector(PREV_EPISODE_CHEVRON);
+const getLastEpisode = titleElement => titleElement.querySelector(LAST_EPISODE);
+const getOnScreenEpisodes = titleElement =>
+  titleElement.querySelectorAll(ON_SCREEN_EPISODES);
 const getEpisodeNumber = episode => episode.querySelector(EPISODE_NUMBER);
 const getPlayButton = episode => episode.querySelector(PLAY_BUTTON);
 
@@ -53,10 +54,8 @@ const getWithRetry = async (getter, count = 3) => {
 };
 
 const shuffleEpisodes = async titleId => {
-  console.log(titleId);
   const titleElement = await getWithRetry(getTitleElement.bind(null, titleId));
   // go to episodes
-  console.log(titleElement);
   const episodeTab = await getWithRetry(getEpisodeTab.bind(null, titleElement));
   episodeTab.click();
   await wait();
@@ -78,26 +77,30 @@ const shuffleEpisodes = async titleId => {
     await wait();
   }
 
-  const lastEpisodeNumberSpan = await getWithRetry(getLastEpisode);
-  const randEpisode = getRandIntInRange(lastEpisodeNumberSpan.innerHTML);
+  const lastEpisodeNumberSpan = await getWithRetry(
+    getLastEpisode.bind(null, titleElement)
+  );
+  const randEpisode = getRandIntInRange(lastEpisodeNumberSpan.innerHTML) + 1;
 
+  getPrevEpisodeChevron = getPrevEpisodeChevron.bind(null, titleElement);
   while (await getWithRetry(getPrevEpisodeChevron)) {
-    const onScreenEpisodes = Array.from(getOnScreenEpisodes());
-    const foundEpisodes = onScreenEpisodes.filter(async episode => {
+    const onScreenEpisodesNodeList = await getWithRetry(
+      getOnScreenEpisodes.bind(null, titleElement)
+    );
+    const onScreenEpisodes = Array.from(onScreenEpisodesNodeList);
+    for (const episode of onScreenEpisodes) {
       const episodeNumberSpan = await getWithRetry(
         getEpisodeNumber.bind(null, episode)
       );
 
-      return parseInt(episodeNumberSpan.innerHTML) === randEpisode;
-    });
+      if (Number(episodeNumberSpan.innerHTML) === randEpisode) {
+        const playButton = await getWithRetry(
+          getPlayButton.bind(null, episode)
+        );
 
-    if (foundEpisodes.length) {
-      const foundEpisode = foundEpisodes[0];
-      const playButton = await getWithRetry(
-        getPlayButton.bind(null, foundEpisode)
-      );
-      window.location = playButton.href;
-      break;
+        window.location = playButton.href;
+        return;
+      }
     }
 
     getPrevEpisodeChevron().click();
