@@ -1,4 +1,4 @@
-# Netflix Randomizer
+# Randflix: A Netflix Randomizer
 
 ## Motivation
 
