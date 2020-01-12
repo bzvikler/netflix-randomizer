@@ -19,7 +19,7 @@ const wait = async () => {
   return new Promise(resolve => {
     setTimeout(() => {
       resolve();
-    }, 200);
+    }, 100);
   });
 };
 const getRandIntInRange = max => Math.floor(Math.random() * Math.floor(max));
@@ -123,7 +123,8 @@ insertButtonIntoSeries();
 // additional injections upon url and tab changes
 let url = window.location.href;
 ["click", "popstate", "onload"].forEach(evt => {
-    window.addEventListener(evt,
+  window.addEventListener(
+    evt,
     function() {
       requestAnimationFrame(() => {
         if (url !== location.href) {
@@ -132,9 +133,9 @@ let url = window.location.href;
         }
       });
     },
-    true)
-  }
-);
+    true
+  );
+});
 
 function addMenuListener(content) {
   var menu = content.querySelector("div.jawBone > ul");
@@ -144,7 +145,6 @@ function addMenuListener(content) {
     });
   }
 }
-
 
 // get jawbones that are series, not movies (aka. has episodes to shuffle)
 function insertButtonIntoSeries() {
@@ -177,8 +177,7 @@ function insertButton(content, id) {
 
     var buttonContent = document.createElement("span");
     buttonContent.setAttribute("class", "nf-flat-button-icon");
-    buttonContent.innerHTML =
-      '<i class="fa fa-random"></i>';
+    buttonContent.innerHTML = '<i class="fa fa-random"></i>';
 
     var buttonText = document.createElement("span");
     buttonText.setAttribute("class", "nf-flat-button-text");
