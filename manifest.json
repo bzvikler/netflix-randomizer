@@ -1,7 +1,7 @@
 {
-  "name": "Netflix Randomizer",
+  "name": "Randflix",
   "version": "1.0",
-  "description": "Adds a shuffle button to play random episode of a given show",
+  "description": "Adds a shuffle button to play random episode of a given show.",
   "permissions": ["activeTab", "declarativeContent", "storage"],
   "options_page": "options.html",
   "background": {
