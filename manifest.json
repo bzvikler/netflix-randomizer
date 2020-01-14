@@ -1,15 +1,9 @@
 {
   "name": "Randflix",
-  "version": "1.0",
+  "version": "1.1",
   "description": "Adds a shuffle button to play random episode of a given show.",
-  "permissions": ["activeTab", "declarativeContent", "storage"],
-  "options_page": "options.html",
-  "background": {
-    "scripts": ["background.js"],
-    "persistent": false
-  },
+  "permissions": [],
   "page_action": {
-    "default_popup": "popup.html",
     "default_icon": {
       "16": "images/icon_16.png",
       "32": "images/icon_32.png",
@@ -27,7 +21,7 @@
   "content_scripts": [
     {
       "matches": ["https://*.netflix.com/*"],
-      "css":     ["styles.css"],
+      "css": ["styles.css"],
       "js": ["contentScript.js"],
       "all_frames": true
     }

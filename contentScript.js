@@ -41,7 +41,7 @@ const getOnScreenEpisodes = titleElement =>
 const getEpisodeNumber = episode => episode.querySelector(EPISODE_NUMBER);
 const getPlayButton = episode => episode.querySelector(PLAY_BUTTON);
 
-const getWithRetry = async (getter, count = 3) => {
+const getWithRetry = async (getter, count = 10) => {
   let result = getter();
   for (let i = 0; i < count; i++) {
     if (!result) {
@@ -62,14 +62,17 @@ const shuffleEpisodes = async titleId => {
   const seasonDropDown = await getWithRetry(
     getSeasonDropdown.bind(null, titleElement)
   );
-  // open seasons drop down
-  seasonDropDown.click();
-  await wait();
-  const seasons = await getWithRetry(getSeasons.bind(null, titleElement));
-  const seasonCount = seasons.length;
-  const randSeason = seasons[getRandIntInRange(seasonCount)];
-  randSeason.click();
-  await wait();
+
+  if (seasonDropDown) {
+    // open seasons drop down
+    seasonDropDown.click();
+    await wait();
+    const seasons = await getWithRetry(getSeasons.bind(null, titleElement));
+    const seasonCount = seasons.length;
+    const randSeason = seasons[getRandIntInRange(seasonCount)];
+    randSeason.click();
+    await wait();
+  }
 
   getNextEpisodeChevron = getNextEpisodeChevron.bind(null, titleElement);
   while (await getWithRetry(getNextEpisodeChevron)) {
