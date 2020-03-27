@@ -1,7 +1,7 @@
 {
-  "name": "Randflix",
-  "version": "1.1",
-  "description": "Adds a shuffle button to play random episode of a given show.",
+  "name": "Randflix - Random Episodes For Netflix",
+  "version": "1.2",
+  "description": "Adds a shuffle button to play a random episode of a given show.",
   "permissions": [],
   "page_action": {
     "default_icon": {
